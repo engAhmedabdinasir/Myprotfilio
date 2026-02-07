@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Blog - My Portfolio{% endblock %}
+
+{% block content %}
+<div class="py-24 bg-gray-50 dark:bg-slate-900 min-h-screen transition-colors duration-300">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <span
+                class="text-indigo-600 dark:text-purple-400 font-semibold tracking-wider text-sm uppercase">Insights</span>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mt-2 mb-4">Latest Articles</h1>
+            <p class="text-xl text-gray-600 dark:text-gray-400">Thoughts, tutorials, and insights on web development.
+            </p>
+        </div>
+
+        <div class="grid gap-12">
+            {% for post in posts %}
+            <article
+                class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 border border-gray-100 dark:border-slate-700 flex flex-col md:flex-row h-full group">
+                <div class="md:w-2/5 relative h-64 md:h-auto overflow-hidden">
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="{{ post.title }}"
+                        class="w-full h-full object-cover absolute inset-0 transform group-hover:scale-105 transition duration-700 ease-out">
+                    {% else %}
+                    <div
+                        class="w-full h-full bg-gray-100 dark:bg-slate-700 flex items-center justify-center text-gray-400 dark:text-gray-500">
+                        <i class="fas fa-pen-nib text-3xl opacity-30"></i>
+                    </div>
+                    {% endif %}
+                    <div
+                        class="absolute top-4 left-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-gray-900 dark:text-white shadow-sm border border-gray-100 dark:border-slate-800">
+                        {{ post.created_at|date:"M d, Y" }}
+                    </div>
+                </div>
+
+                <div class="p-8 md:w-3/5 flex flex-col justify-center">
+                    <h2
+                        class="text-2xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-indigo-600 dark:group-hover:text-purple-400 transition leading-tight">
+                        <a href="{% url 'blog_detail' post.slug %}">
+                            {{ post.title }}
+                        </a>
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6 line-clamp-3 leading-relaxed font-light">
+                        {{ post.content|striptags }}
+                    </p>
+
+                    <div
+                        class="mt-auto pt-6 border-t border-gray-50 dark:border-slate-700 flex items-center justify-between">
+                        <a href="{% url 'blog_detail' post.slug %}"
+                            class="inline-flex items-center text-indigo-600 dark:text-purple-400 font-bold hover:text-indigo-800 dark:hover:text-purple-300 transition group/link">
+                            Read Article
+                            <i
+                                class="fas fa-arrow-right ml-2 text-sm transform group-hover/link:translate-x-1 transition"></i>
+                        </a>
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+            <div
+                class="text-center py-20 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700">
+                <p class="text-xl text-gray-500 dark:text-gray-400">No blog posts published yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
